@@ -10,7 +10,9 @@ How ?
 -----
 
 I will unsold led from the light, 
-then insert all in 4 different supports 
+
+then insert all in 4 different support, 
+
 and connect with the wire to the light as a "power supply"
 
 3D views
