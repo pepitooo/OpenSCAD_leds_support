@@ -52,17 +52,17 @@ module support_hole()
 	rotate(a=90, v=[0,0,1]) 
 		translate([6,-2,6])
 			rotate(a=90, v=[1,0,0]) 
-				cylinder(h=10,r=1);
+				cylinder(h=10,r=2.5/2);
 	rotate(a=90, v=[0,0,1]) 
 		translate([-6,-2,6])
 			rotate(a=90, v=[1,0,0]) 
-				cylinder(h=10,r=1);
+				cylinder(h=10,r=2.5/2);
 }
 
 module cable_hole()
 {
 	translate([8,0,11.5]) 
-	cube(size = [5,4,1], center = true);
+	cube(size = [4,9.70,1.30], center = true);
 }
 
 module clips() 
