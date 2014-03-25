@@ -67,45 +67,28 @@ module cable_hole()
 
 module clips() 
 {
-	lenght_clip=5;
-	translate([0,9.9,9])
+	lenght_clip=7;
+	translate([0,8.45,9])
 		rotate(a=90, v=[0,0,1])
 			rotate(a=90, v=[1,0,0]) 
 			linear_extrude(height=lenght_clip, center = true)
 				polygon([[0,0],[0,2],[1,1],[1,0]], convexity = N);
 			
-	translate([0,-9.9,9])
+	translate([0,-8.45,9])
 		rotate(a=-90, v=[0,0,1])
 			rotate(a=90, v=[1,0,0]) 
 				linear_extrude(height=lenght_clip, center = true)
 					polygon([[0,0],[0,2],[1,1],[1,0]], convexity = N);
 }
 
-module led_support() {
-	difference() {
-		union() {
-			translate([0,0,6]) roundedBox([20,20,12], 5, true);
-			clips();
-		}
-		translate([4,0,3]) ledfootprint(5.1, 0.4);
-		translate([-4,4,3]) ledfootprint(5.1, 0.4);
-		translate([-4,-4,3]) ledfootprint(5.1, 0.4);
-
-		translate([0,0,11]) roundedBox([17,17,3], 5, true);
-		support_hole();
-		cable_hole();		
-
-	}
-}
-
 module cap_locker() {
 		rotate(a=-90, v=[0,0,1])
-			translate([10.75,0,3])
-				cube(size = [1.5,7,6.5], center = true);
+			translate([9.25,0,3])
+				cube(size = [1.5,10,6.5], center = true);
 
 		rotate(a=-90, v=[0,0,1])
-			translate([-10.75,0,3])
-				cube(size = [1.5,7,6.5], center = true);
+			translate([-9.25,0,3])
+				cube(size = [1.5,10,6.5], center = true);
 }
 
 module cap() {
@@ -115,11 +98,36 @@ module cap() {
 		led_support();
 	}
 	difference() {
-		translate([0,0,8.45]) cap_locker();
+		translate([0,0,8]) 
+			cap_locker();
 		clips();
 	}
 }
 
+module clips_hole() {
+	translate([0,0,7.5])
+		scale([1.1,1,1]) 
+			cap_locker();
+}
+
+module led_support() {
+	difference() {
+		union() {
+			translate([0,0,6]) roundedBox([20,20,12], 5, true);
+		}
+		translate([4,0,3]) ledfootprint(5.1, 0.4);
+		translate([-4,4,3]) ledfootprint(5.1, 0.4);
+		translate([-4,-4,3]) ledfootprint(5.1, 0.4);
+
+		translate([0,0,11]) roundedBox([16,16,3], 5, true);
+		support_hole();
+		cable_hole();	
+		scale([1.05,1,1]) 
+		clips_hole();
+	}
+	clips();
+}
 
 led_support();
-translate([0,0,5]) cap();
+translate([0,0,8]) 
+ cap();
