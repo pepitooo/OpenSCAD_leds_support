@@ -1,5 +1,8 @@
-
-
+$fn=100;
+LED_DIAMETER = 5.2;
+LED_BORDER = 0.1;
+CLIP_SIZE = 0.3;
+SUPPORT_DIAMETER  = 2.5;
 
 // size is a vector [w, h, d]
 module roundedBox(size, radius, sidesonly)
@@ -34,12 +37,11 @@ module roundedBox(size, radius, sidesonly)
 	}
 }
 
-$fn=30;
 module ledfootprint(diameter, border)
 {
 	OFFSET_BORDER = 4;
 	
-	rotate_extrude($fn=200) 
+	rotate_extrude() 
 	polygon([[0,-7],
 		[9,-7],[diameter / 2,0],
 		[diameter / 2,OFFSET_BORDER],[diameter / 2 + border,OFFSET_BORDER],[diameter / 2 + border,OFFSET_BORDER+1],[diameter / 2 + (border - 0.1) ,OFFSET_BORDER+1], 
@@ -52,11 +54,11 @@ module support_hole()
 	rotate(a=90, v=[0,0,1]) 
 		translate([6,-2,6])
 			rotate(a=90, v=[1,0,0]) 
-				cylinder(h=10,r=2.5/2);
+				cylinder(h=10,r=SUPPORT_DIAMETER/2);
 	rotate(a=90, v=[0,0,1]) 
 		translate([-6,-2,6])
 			rotate(a=90, v=[1,0,0]) 
-				cylinder(h=10,r=2.5/2);
+				cylinder(h=10,r=SUPPORT_DIAMETER/2);
 }
 
 module cable_hole()
@@ -72,13 +74,13 @@ module clips()
 		rotate(a=90, v=[0,0,1])
 			rotate(a=90, v=[1,0,0]) 
 			linear_extrude(height=lenght_clip, center = true)
-				polygon([[0,0],[0,2],[1,1],[1,0]], convexity = N);
+				polygon([[0,0],[0,2],[CLIP_SIZE,1],[CLIP_SIZE,0]], convexity = N);
 			
 	translate([0,-8.45,9])
 		rotate(a=-90, v=[0,0,1])
 			rotate(a=90, v=[1,0,0]) 
 				linear_extrude(height=lenght_clip, center = true)
-					polygon([[0,0],[0,2],[1,1],[1,0]], convexity = N);
+					polygon([[0,0],[0,2],[CLIP_SIZE,1],[CLIP_SIZE,0]], convexity = N);
 }
 
 module cap_locker() {
@@ -115,9 +117,9 @@ module led_support() {
 		union() {
 			translate([0,0,6]) roundedBox([20,20,12], 5, true);
 		}
-		translate([4,0,3]) ledfootprint(5.1, 0.4);
-		translate([-4,4,3]) ledfootprint(5.1, 0.4);
-		translate([-4,-4,3]) ledfootprint(5.1, 0.4);
+		translate([4,0,3]) ledfootprint(LED_DIAMETER, LED_BORDER);
+		translate([-4,4,3]) ledfootprint(LED_DIAMETER, LED_BORDER);
+		translate([-4,-4,3]) ledfootprint(LED_DIAMETER, LED_BORDER);
 
 		translate([0,0,11]) roundedBox([16,16,3], 5, true);
 		support_hole();
