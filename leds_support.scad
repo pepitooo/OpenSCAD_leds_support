@@ -1,8 +1,9 @@
 $fn=100;
-LED_DIAMETER = 5.2;
-LED_BORDER = 0.1;
-CLIP_SIZE = 0.3;
+LED_DIAMETER = 5.15;
+LED_BORDER = 0.8;
+CLIP_SIZE = 0.4;
 SUPPORT_DIAMETER  = 2.5;
+BOX_HIGHT = 15;
 
 // size is a vector [w, h, d]
 module roundedBox(size, radius, sidesonly)
@@ -44,10 +45,13 @@ module ledfootprint(diameter, border)
 	rotate_extrude() 
 	polygon([[0,-7],
 		[9,-7],[diameter / 2,0],
-		[diameter / 2,OFFSET_BORDER],[diameter / 2 + border,OFFSET_BORDER],[diameter / 2 + border,OFFSET_BORDER+1],[diameter / 2 + (border - 0.1) ,OFFSET_BORDER+1], 
-		[diameter / 2 + border,OFFSET_BORDER+1.2],
-		[diameter / 2 + border,15],[0,15]], convexity = N);
+		[diameter / 2,OFFSET_BORDER],[diameter / 2 + border,OFFSET_BORDER],
+        //[diameter / 2 + border,OFFSET_BORDER+1],
+        //[diameter / 2 + (border - 0.1) ,OFFSET_BORDER+1], 
+		//[diameter / 2 + border,OFFSET_BORDER+1.2],
+		[diameter / 2 + border,20],[0,20]], convexity = N);
 }
+
 
 module support_hole() 
 {
@@ -63,13 +67,13 @@ module support_hole()
 
 module cable_hole()
 {
-	translate([8,0,11.5]) 
-	cube(size = [4,9.70,1.30], center = true);
+	translate([9,0,12.7]) 
+	    cube(size = [7,9.70,2], center = true);
 }
 
 module clips() 
 {
-	lenght_clip=7;
+	lenght_clip=6.5;
 	translate([0,8.45,9])
 		rotate(a=90, v=[0,0,1])
 			rotate(a=90, v=[1,0,0]) 
@@ -85,25 +89,29 @@ module clips()
 
 module cap_locker() {
 		rotate(a=-90, v=[0,0,1])
-			translate([9.25,0,3])
+			translate([9.5,0,3])
 				cube(size = [1.5,10,6.5], center = true);
 
 		rotate(a=-90, v=[0,0,1])
-			translate([-9.25,0,3])
+			translate([-9.5,0,3])
 				cube(size = [1.5,10,6.5], center = true);
 }
 
 module cap() {
 	difference() {
-		translate([0,0,13.2]) roundedBox([20,20,3], 5, true);
-		hole_wire();	
-		led_support();
+		translate([0,0,13.2]) 
+            roundedBox([20,20,3], 5, true);
+		translate([0,0,-0.1]) cable_hole();	
+	    //led_support();
+        translate([0,0,5.5])
+            difference() {
+                roundedBox([21,21,BOX_HIGHT], 5, true);
+                translate([0,0,4]) 
+                    roundedBox([16.2,16.2,9.5], 5, true);
+                }
+        
 	}
-	difference() {
-		translate([0,0,8]) 
-			cap_locker();
-		clips();
-	}
+    
 }
 
 module clips_hole() {
@@ -115,21 +123,21 @@ module clips_hole() {
 module led_support() {
 	difference() {
 		union() {
-			translate([0,0,6]) roundedBox([20,20,12], 5, true);
+			translate([0,0,6]) roundedBox([20,20,BOX_HIGHT], 5, true);
 		}
-		translate([4,0,3]) ledfootprint(LED_DIAMETER, LED_BORDER);
-		translate([-4,4,3]) ledfootprint(LED_DIAMETER, LED_BORDER);
-		translate([-4,-4,3]) ledfootprint(LED_DIAMETER, LED_BORDER);
+		translate([4,0,1]) ledfootprint(LED_DIAMETER, LED_BORDER);
+		translate([-4,4,1]) ledfootprint(LED_DIAMETER, LED_BORDER);
+		translate([-4,-4,1]) ledfootprint(LED_DIAMETER, LED_BORDER);
 
-		translate([0,0,11]) roundedBox([16,16,3], 5, true);
+		translate([0,0,BOX_HIGHT -2]) roundedBox([16,16,9.5], 5, true);
 		support_hole();
 		cable_hole();	
-		scale([1.05,1,1]) 
-		clips_hole();
+		//scale([1.05,1,1]) 
+		//clips_hole();
 	}
-	clips();
+	//clips();
 }
 
 led_support();
-translate([0,0,8]) 
+translate([0,0,16]) 
  cap();
